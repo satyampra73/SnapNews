@@ -3,7 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
 }
-
+val MY_KEY: String = project.findProperty("MY_KEY") as? String ?: ""
+val MY_URL: String = project.findProperty("MY_URL") as? String ?: ""
 android {
     namespace = "com.satyam.snapnews"
     compileSdk = 35
@@ -14,13 +15,15 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
+        buildConfigField("String","API_KEY",MY_KEY)
+        buildConfigField("String","BASE_URL",MY_URL)
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -33,6 +36,10 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 
