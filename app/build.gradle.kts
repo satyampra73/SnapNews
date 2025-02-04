@@ -65,5 +65,8 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+    testImplementation ("com.google.truth:truth:1.4.4")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
 }
