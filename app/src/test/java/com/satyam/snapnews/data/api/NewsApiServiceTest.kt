@@ -49,6 +49,31 @@ class NewsApiServiceTest {
            val responseBody = service.getTopHeadlines("us",1).body()
            val request = server.takeRequest()
            assertThat(responseBody).isNotNull()
+           assertThat(request.path).isEqualTo("/v2/top-headlines?country=us&page=1&apiKey=aa95f5fad86448c19a9a00dc34e1d121")
        }
     }
+
+    @Test
+    fun getTopHeadlines_receivedResponse_correctPagesSize(){
+        runBlocking{
+            enqueueMockResponse("newsresponse.json")
+            val responseBody = service.getTopHeadlines("us",1).body()
+            val articlesList = responseBody!!.articles
+            assertThat(articlesList.size).isEqualTo(19)
+        }
+    }
+
+    @Test
+    fun getTopHeadlines_receivedResponse_correctContent(){
+        runBlocking{
+            enqueueMockResponse("newsresponse.json")
+            val responseBody = service.getTopHeadlines("us",1).body()
+            val articlesList = responseBody!!.articles
+            val article = articlesList[0]
+            assertThat(article.author).isEqualTo("Derek Saul")
+            assertThat(article.url).isEqualTo("https://www.forbes.com/sites/dereksaul/2025/02/03/apple-nvidia-and-tesla-among-hardest-hit-as-tariffs-drag-down-stock-market/")
+        }
+    }
+
+
 }
