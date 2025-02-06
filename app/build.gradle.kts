@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 val MY_KEY: String = project.findProperty("MY_KEY") as? String ?: ""
 val MY_URL: String = project.findProperty("MY_URL") as? String ?: ""
@@ -42,6 +43,9 @@ android {
         buildConfig = true
     }
 }
+kapt {
+    correctErrorTypes = true
+}
 
 dependencies {
     val room_version = "2.6.1"
@@ -76,5 +80,9 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     // LiveData
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+
+    //hilt dependency injection
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
 }
