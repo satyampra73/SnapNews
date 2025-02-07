@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/round_corner_bg"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="8dp"
+        android:layout_centerInParent="true"
+        >
+
+        <ImageView
+            android:id="@+id/imgImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/image1"
+            />
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:textSize="18sp"
+            />
+
+        <TextView
+            android:id="@+id/txtDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textColor="@color/black"
+            android:layout_marginTop="2dp"
+            android:textSize="15sp"
+            />
+
+        <TextView
+            android:id="@+id/txtPublishedAt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Published At"
+            android:textColor="@color/black"
+            android:layout_marginTop="2dp"
+            android:textSize="12sp"
+            />
+
+        <TextView
+            android:id="@+id/txtTvSource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TVSource"
+            android:textColor="@color/black"
+            android:layout_marginTop="2dp"
+            android:textSize="12sp"
+            />
+
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

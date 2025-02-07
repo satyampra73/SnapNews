@@ -7,11 +7,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.setPadding
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.satyam.snapnews.databinding.ActivityMainBinding
+import com.satyam.snapnews.presentation.viewmodel.NewsViewModel
+import com.satyam.snapnews.presentation.viewmodel.NewsViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var factory: NewsViewModelFactory
+    lateinit var viewModel : NewsViewModel
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         binding.bnvNews.setupWithNavController(
             navController
         )
+        viewModel = ViewModelProvider(this,factory)[NewsViewModel::class.java]
 
     }
 }
