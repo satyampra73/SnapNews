@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("androidx.navigation.safeargs")
 }
 val MY_KEY: String = project.findProperty("MY_KEY") as? String ?: ""
 val MY_URL: String = project.findProperty("MY_URL") as? String ?: ""
@@ -41,6 +42,7 @@ android {
 
     buildFeatures {
         buildConfig = true
+        viewBinding = true
     }
 }
 kapt {
@@ -48,6 +50,7 @@ kapt {
 }
 
 dependencies {
+    val nav_version = "2.8.6"
     val room_version = "2.6.1"
     val dagger_version = "2.52"
     val coroutines_version = "1.9.0"
@@ -84,5 +87,9 @@ dependencies {
     //hilt dependency injection
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+
+    // Views/Fragments integration
+    implementation("androidx.navigation:navigation-fragment:$nav_version")
+    implementation("androidx.navigation:navigation-ui:$nav_version")
 
 }
