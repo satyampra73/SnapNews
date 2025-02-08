@@ -28,5 +28,9 @@
         android:id="@+id/infoFragment"
         android:name="com.satyam.snapnews.InfoFragment"
         android:label="fragment_ingo"
-        tools:layout="@layout/fragment_info" />
+        tools:layout="@layout/fragment_info" >
+        <argument
+            android:name="selected_article"
+            app:argType="com.satyam.snapnews.data.model.Article" />
+    </fragment>
 </navigation>

@@ -75,5 +75,21 @@ class NewsApiServiceTest {
         }
     }
 
+    @Test
+    fun getTopHeadlines_receivedResponse_noNullFields() = runBlocking {
+        enqueueMockResponse("newsresponse.json")
+        val responseBody = service.getTopHeadlines("us", 1).body()
+        assertThat(responseBody).isNotNull()
+
+        val articlesList = responseBody!!.articles
+        assertThat(articlesList).isNotEmpty()
+
+        for (article in articlesList) {
+            assertThat(article.title).isNotNull()
+            assertThat(article.url).isNotNull()
+            assertThat(article.author).isNotNull()
+        }
+    }
+
 
 }

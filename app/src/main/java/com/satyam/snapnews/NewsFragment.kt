@@ -1,14 +1,17 @@
 package com.satyam.snapnews
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.satyam.snapnews.databinding.FragmentNewsBinding
 import com.satyam.snapnews.presentation.adapter.NewsAdapter
 import com.satyam.snapnews.presentation.viewmodel.NewsViewModel
@@ -36,6 +39,16 @@ class NewsFragment : Fragment() {
         viewModel = (activity as MainActivity).viewModel
         newsAdapter = (activity as MainActivity).newsAdapter
 
+        newsAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("selected_article",it)
+            }
+
+            findNavController().navigate(
+                R.id.action_newsFragment_to_infoFragment,
+                bundle
+            )
+        }
         initRecyclerView()
         viewNewsList()
 
@@ -47,6 +60,8 @@ class NewsFragment : Fragment() {
             response->
             when(response){
                 is com.satyam.snapnews.data.util.Resource.Success->{
+                    val json = Gson().toJson(response)
+                    Log.d("strResponse","Response : $json")
                 hideProgressBar()
                 response.data?.let{
                     newsAdapter.differ.submitList(it.articles.toList())
