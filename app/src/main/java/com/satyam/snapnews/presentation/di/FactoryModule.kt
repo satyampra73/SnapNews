@@ -2,6 +2,7 @@ package com.satyam.snapnews.presentation.di
 
 import android.app.Application
 import com.satyam.snapnews.domain.usecase.GetNewsHeadlinesUseCase
+import com.satyam.snapnews.domain.usecase.GetSearchedNewsUseCase
 import com.satyam.snapnews.presentation.viewmodel.NewsViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -17,8 +18,10 @@ class FactoryModule {
     @Singleton
     fun provideNewsViewModelFactory(
         application: Application,
-        getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase
+        getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
+        getSearchedNewsUseCase: GetSearchedNewsUseCase
+
     ):NewsViewModelFactory{
-        return NewsViewModelFactory(application,getNewsHeadlinesUseCase)
+        return NewsViewModelFactory(application,getNewsHeadlinesUseCase,getSearchedNewsUseCase)
     }
 }

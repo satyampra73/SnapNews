@@ -12,6 +12,7 @@
         android:layout_alignParentTop="true"
         android:background="@color/orange"
         android:theme="@style/ToolbarTheme"
+        android:visibility="gone"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         >
@@ -30,6 +31,16 @@
                 />
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/toolbar"
+    android:orientation="vertical">
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:background="@color/grey"
+        android:layout_height="match_parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNews"
@@ -38,6 +49,8 @@
         tools:listitem="@layout/news_list_item"
         android:layout_below="@id/toolbar"
         />
+</LinearLayout>
+
 
 
 
@@ -45,8 +58,11 @@
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_centerVertical="true"
         android:indeterminateTint="@color/orange"
         />
+
+
 
 </RelativeLayout>

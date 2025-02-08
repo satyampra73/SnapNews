@@ -13,15 +13,18 @@ import androidx.lifecycle.viewModelScope
 import com.satyam.snapnews.data.model.APIResponse
 import com.satyam.snapnews.data.util.Resource
 import com.satyam.snapnews.domain.usecase.GetNewsHeadlinesUseCase
+import com.satyam.snapnews.domain.usecase.GetSearchedNewsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.internal.tls.CertificateChainCleaner
 
-class NewsViewModel (val app : Application,
-    val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase
+class NewsViewModel (
+    val app : Application,
+    val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
+    val getSearchedNewsUseCase: GetSearchedNewsUseCase
 ): AndroidViewModel(app) {
     val newsHeadLines : MutableLiveData<Resource<APIResponse>> = MutableLiveData()
-
+    val searchedNews : MutableLiveData<Resource<APIResponse>> = MutableLiveData()
     fun getNewsHeadlines(country : String, page : Int)= viewModelScope.launch(Dispatchers.IO){
 
         newsHeadLines.postValue(Resource.Loading())
@@ -40,6 +43,30 @@ class NewsViewModel (val app : Application,
 
 
     }
+
+
+    fun getSearchedNews(country : String, searchQuery : String ,page : Int)= viewModelScope.launch(Dispatchers.IO){
+
+        searchedNews.postValue(Resource.Loading())
+        try {
+            if (isNetworkAvailable(app)){
+                val apiResult = getSearchedNewsUseCase.execute(country,searchQuery,page)
+                searchedNews.postValue(apiResult)
+            }
+            else{
+                searchedNews.postValue(Resource.Error("Internet is not available"))
+            }
+        }
+        catch (e:Exception){
+            searchedNews.postValue(Resource.Error(e.message.toString()))
+        }
+
+
+    }
+
+
+
+
 
     @Suppress("DEPRECATION")
     fun isNetworkAvailable(context: Context): Boolean {

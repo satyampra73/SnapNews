@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +16,9 @@ import com.google.gson.Gson
 import com.satyam.snapnews.databinding.FragmentNewsBinding
 import com.satyam.snapnews.presentation.adapter.NewsAdapter
 import com.satyam.snapnews.presentation.viewmodel.NewsViewModel
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class NewsFragment : Fragment() {
     private lateinit var viewModel: NewsViewModel
@@ -41,7 +45,7 @@ class NewsFragment : Fragment() {
 
         newsAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
-                putSerializable("selected_article",it)
+                putSerializable("selected_article", it)
             }
 
             findNavController().navigate(
@@ -51,40 +55,41 @@ class NewsFragment : Fragment() {
         }
         initRecyclerView()
         viewNewsList()
+        setSearchView()
 
     }
 
-    private fun viewNewsList(){
-        viewModel.getNewsHeadlines(country,page)
-        viewModel.newsHeadLines.observe(viewLifecycleOwner,{
-            response->
-            when(response){
-                is com.satyam.snapnews.data.util.Resource.Success->{
+    private fun viewNewsList() {
+        viewModel.getNewsHeadlines(country, page)
+        viewModel.newsHeadLines.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is com.satyam.snapnews.data.util.Resource.Success -> {
                     val json = Gson().toJson(response)
-                    Log.d("strResponse","Response : $json")
-                hideProgressBar()
-                response.data?.let{
-                    newsAdapter.differ.submitList(it.articles.toList())
-                    if (it.totalResults % 20 == 0){
-                        pages = it.totalResults / 20
-                    }
-                    else{
-                        pages = it.totalResults / 20 + 1
-                    }
-
-                    isLastPage = page == pages
-
-                }
-
-                }
-                is com.satyam.snapnews.data.util.Resource.Error->{
+                    Log.d("strResponse", "Response : $json")
                     hideProgressBar()
-                    response.message?.let{
-                        Toast.makeText(activity,"An error occured : $it", Toast.LENGTH_LONG).show()
+                    response.data?.let {
+                        newsAdapter.differ.submitList(it.articles.toList())
+                        if (it.totalResults % 20 == 0) {
+                            pages = it.totalResults / 20
+                        } else {
+                            pages = it.totalResults / 20 + 1
+                        }
+
+                        isLastPage = page == pages
+
                     }
 
                 }
-                is com.satyam.snapnews.data.util.Resource.Loading->{
+
+                is com.satyam.snapnews.data.util.Resource.Error -> {
+                    hideProgressBar()
+                    response.message?.let {
+                        Toast.makeText(activity, "An error occured : $it", Toast.LENGTH_LONG).show()
+                    }
+
+                }
+
+                is com.satyam.snapnews.data.util.Resource.Loading -> {
                     showProgressBar()
 
                 }
@@ -104,21 +109,21 @@ class NewsFragment : Fragment() {
 
     }
 
-    private fun showProgressBar(){
+    private fun showProgressBar() {
         isLoading = true
         binding.progressBar.visibility = View.VISIBLE
     }
 
-    private fun hideProgressBar(){
+    private fun hideProgressBar() {
         isLoading = false
         binding.progressBar.visibility = View.INVISIBLE
     }
 
 
-    private val onScrollListener = object : RecyclerView.OnScrollListener(){
+    private val onScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
-            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                 isScrolling = true
             }
         }
@@ -129,16 +134,86 @@ class NewsFragment : Fragment() {
             val sizeOfTheCurrentList = layoutManager.itemCount
             val visibleItems = layoutManager.childCount
             val topPosition = layoutManager.findFirstVisibleItemPosition()
-            val hasReachedToEnd = topPosition+visibleItems >= sizeOfTheCurrentList
-            val shouldPaginate = !isLoading &&!isLastPage && hasReachedToEnd && isScrolling
+            val hasReachedToEnd = topPosition + visibleItems >= sizeOfTheCurrentList
+            val shouldPaginate = !isLoading && !isLastPage && hasReachedToEnd && isScrolling
 
-            if (shouldPaginate){
+            if (shouldPaginate) {
                 page++
-                viewModel.getNewsHeadlines(country,page)
+                viewModel.getNewsHeadlines(country, page)
                 isScrolling = false
 
             }
         }
+    }
+
+    private fun setSearchView() {
+        binding.searchView.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    viewModel.getSearchedNews(country, p0.toString(), page)
+                    viewSearchedNews()
+                    return false
+                }
+
+                override fun onQueryTextChange(p0: String?): Boolean {
+                    MainScope().launch{
+                        delay(2000)
+                        viewModel.getSearchedNews(country, p0.toString(), page)
+                        viewSearchedNews()
+                    }
+                    return false
+                }
+            }
+        )
+
+        binding.searchView.setOnCloseListener(
+            object : SearchView.OnCloseListener {
+                override fun onClose(): Boolean {
+                    initRecyclerView()
+                    viewNewsList()
+                    return false
+                }
+            }
+        )
+    }
+
+    fun viewSearchedNews() {
+        viewModel.searchedNews.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is com.satyam.snapnews.data.util.Resource.Success -> {
+                    val json = Gson().toJson(response)
+                    Log.d("strResponse", "Searched Response : $json")
+                    hideProgressBar()
+                    response.data?.let {
+                        newsAdapter.differ.submitList(it.articles.toList())
+                        if (it.totalResults % 20 == 0) {
+                            pages = it.totalResults / 20
+                        } else {
+                            pages = it.totalResults / 20 + 1
+                        }
+
+                        isLastPage = page == pages
+
+                    }
+
+                }
+
+                is com.satyam.snapnews.data.util.Resource.Error -> {
+                    hideProgressBar()
+                    response.message?.let {
+                        Toast.makeText(activity, "An error occured : $it", Toast.LENGTH_LONG).show()
+                    }
+
+                }
+
+                is com.satyam.snapnews.data.util.Resource.Loading -> {
+                    showProgressBar()
+
+                }
+
+            }
+
+        })
     }
 
 }
