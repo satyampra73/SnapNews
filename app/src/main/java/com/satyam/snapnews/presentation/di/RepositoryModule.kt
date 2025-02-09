@@ -1,6 +1,7 @@
 package com.satyam.snapnews.presentation.di
 
 import com.satyam.snapnews.data.repository.NewsRepositoryImpl
+import com.satyam.snapnews.data.repository.dataSource.NewsLocalDataSource
 import com.satyam.snapnews.data.repository.dataSource.NewsRemoteDataSource
 import com.satyam.snapnews.domain.repository.NewsRepository
 import dagger.Module
@@ -16,9 +17,10 @@ class RepositoryModule {
     @Singleton
     @Provides
     fun provideNewsRepository(
-        newsRemoteDataSource: NewsRemoteDataSource
+        newsRemoteDataSource: NewsRemoteDataSource,
+        newsLocalDataSource: NewsLocalDataSource
     ): NewsRepository {
-        return NewsRepositoryImpl(newsRemoteDataSource)
+        return NewsRepositoryImpl(newsRemoteDataSource,newsLocalDataSource)
     }
 
 }

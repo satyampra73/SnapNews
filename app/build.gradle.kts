@@ -94,5 +94,10 @@ dependencies {
 
     //glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("androidx.room:room-ktx:$room_version")
 
+    // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
+    // See Add the KSP plugin to your project
+    //noinspection KaptUsageInsteadOfKsp
+    kapt("androidx.room:room-compiler:$room_version")
 }

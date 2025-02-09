@@ -11,9 +11,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satyam.snapnews.data.model.APIResponse
+import com.satyam.snapnews.data.model.Article
 import com.satyam.snapnews.data.util.Resource
+import com.satyam.snapnews.domain.usecase.DeleteSavedNewsUseCase
 import com.satyam.snapnews.domain.usecase.GetNewsHeadlinesUseCase
+import com.satyam.snapnews.domain.usecase.GetSavedNewsUseCase
 import com.satyam.snapnews.domain.usecase.GetSearchedNewsUseCase
+import com.satyam.snapnews.domain.usecase.SaveNewsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.internal.tls.CertificateChainCleaner
@@ -21,7 +25,9 @@ import okhttp3.internal.tls.CertificateChainCleaner
 class NewsViewModel (
     val app : Application,
     val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
-    val getSearchedNewsUseCase: GetSearchedNewsUseCase
+    val getSearchedNewsUseCase: GetSearchedNewsUseCase,
+    val savedNewsUseCase: SaveNewsUseCase,
+
 ): AndroidViewModel(app) {
     val newsHeadLines : MutableLiveData<Resource<APIResponse>> = MutableLiveData()
     val searchedNews : MutableLiveData<Resource<APIResponse>> = MutableLiveData()
@@ -63,6 +69,13 @@ class NewsViewModel (
 
 
     }
+
+    //local Data
+
+    fun saveArticle(article: Article) = viewModelScope.launch {
+        savedNewsUseCase.execute(article)
+    }
+
 
 
 
