@@ -2,6 +2,7 @@ package com.satyam.snapnews.presentation.di
 
 import android.app.Application
 import com.satyam.snapnews.domain.usecase.GetNewsHeadlinesUseCase
+import com.satyam.snapnews.domain.usecase.GetSavedNewsUseCase
 import com.satyam.snapnews.domain.usecase.GetSearchedNewsUseCase
 import com.satyam.snapnews.domain.usecase.SaveNewsUseCase
 import com.satyam.snapnews.presentation.viewmodel.NewsViewModelFactory
@@ -21,14 +22,16 @@ class FactoryModule {
         application: Application,
         getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
         getSearchedNewsUseCase: GetSearchedNewsUseCase,
-        savedNewsUseCase: SaveNewsUseCase
+        savedNewsUseCase: SaveNewsUseCase,
+        getSavedNewsUseCase: GetSavedNewsUseCase
 
     ):NewsViewModelFactory{
         return NewsViewModelFactory(
             application,
             getNewsHeadlinesUseCase,
             getSearchedNewsUseCase,
-            savedNewsUseCase
+            savedNewsUseCase,
+            getSavedNewsUseCase
             )
     }
 }

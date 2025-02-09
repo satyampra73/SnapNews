@@ -2,6 +2,7 @@ package com.satyam.snapnews.presentation.di
 
 import com.satyam.snapnews.domain.repository.NewsRepository
 import com.satyam.snapnews.domain.usecase.GetNewsHeadlinesUseCase
+import com.satyam.snapnews.domain.usecase.GetSavedNewsUseCase
 import com.satyam.snapnews.domain.usecase.GetSearchedNewsUseCase
 import com.satyam.snapnews.domain.usecase.SaveNewsUseCase
 import dagger.Module
@@ -36,6 +37,14 @@ class UseCaseModule {
         newsRepository: NewsRepository
     ): SaveNewsUseCase{
         return SaveNewsUseCase(newsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetSavedNewsNewsUseCase(
+        newsRepository: NewsRepository
+    ): GetSavedNewsUseCase{
+        return GetSavedNewsUseCase(newsRepository)
     }
 
 }
