@@ -1,6 +1,7 @@
 package com.satyam.snapnews.presentation.di
 
 import com.satyam.snapnews.domain.repository.NewsRepository
+import com.satyam.snapnews.domain.usecase.DeleteSavedNewsUseCase
 import com.satyam.snapnews.domain.usecase.GetNewsHeadlinesUseCase
 import com.satyam.snapnews.domain.usecase.GetSavedNewsUseCase
 import com.satyam.snapnews.domain.usecase.GetSearchedNewsUseCase
@@ -45,6 +46,14 @@ class UseCaseModule {
         newsRepository: NewsRepository
     ): GetSavedNewsUseCase{
         return GetSavedNewsUseCase(newsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteSavedNewsUseCase(
+        newsRepository: NewsRepository
+    ): DeleteSavedNewsUseCase{
+        return DeleteSavedNewsUseCase(newsRepository)
     }
 
 }

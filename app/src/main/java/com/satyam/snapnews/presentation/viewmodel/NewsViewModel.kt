@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.satyam.snapnews.data.model.APIResponse
 import com.satyam.snapnews.data.model.Article
 import com.satyam.snapnews.data.util.Resource
+import com.satyam.snapnews.domain.usecase.DeleteSavedNewsUseCase
 import com.satyam.snapnews.domain.usecase.GetNewsHeadlinesUseCase
 import com.satyam.snapnews.domain.usecase.GetSavedNewsUseCase
 import com.satyam.snapnews.domain.usecase.GetSearchedNewsUseCase
@@ -24,6 +25,7 @@ class NewsViewModel(
     val getSearchedNewsUseCase: GetSearchedNewsUseCase,
     val savedNewsUseCase: SaveNewsUseCase,
     val getSavedNewsUseCase: GetSavedNewsUseCase,
+    val deleteSavedNewsUseCase: DeleteSavedNewsUseCase
 
     ) : AndroidViewModel(app) {
     val newsHeadLines: MutableLiveData<Resource<APIResponse>> = MutableLiveData()
@@ -75,6 +77,10 @@ class NewsViewModel(
         getSavedNewsUseCase.execute().collect{
             emit(it)
         }
+    }
+
+    fun deleteArticle(article: Article) = viewModelScope.launch {
+        deleteSavedNewsUseCase.execute(article)
     }
 
 

@@ -9,6 +9,7 @@ import android.widget.AbsListView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -156,10 +157,12 @@ class NewsFragment : Fragment() {
                 }
 
                 override fun onQueryTextChange(p0: String?): Boolean {
-                    MainScope().launch{
+                    viewLifecycleOwner.lifecycleScope.launch {
                         delay(2000)
-                        viewModel.getSearchedNews(country, p0.toString(), page)
-                        viewSearchedNews()
+                        if (isAdded && view != null) {
+                            viewModel.getSearchedNews(country, p0.toString(), page)
+                            viewSearchedNews()
+                        }
                     }
                     return false
                 }

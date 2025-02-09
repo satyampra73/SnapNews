@@ -3,6 +3,7 @@ package com.satyam.snapnews.presentation.viewmodel
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.satyam.snapnews.domain.usecase.DeleteSavedNewsUseCase
 import com.satyam.snapnews.domain.usecase.GetNewsHeadlinesUseCase
 import com.satyam.snapnews.domain.usecase.GetSavedNewsUseCase
 import com.satyam.snapnews.domain.usecase.GetSearchedNewsUseCase
@@ -13,7 +14,8 @@ class NewsViewModelFactory(
     val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
     val getSearchedNewsUseCase: GetSearchedNewsUseCase,
     val savedNewsUseCase: SaveNewsUseCase,
-    val getSavedNewsUseCase: GetSavedNewsUseCase
+    val getSavedNewsUseCase: GetSavedNewsUseCase,
+    val deleteSavedNewsUseCase: DeleteSavedNewsUseCase
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -22,7 +24,8 @@ class NewsViewModelFactory(
             getNewsHeadlinesUseCase,
             getSearchedNewsUseCase,
             savedNewsUseCase,
-            getSavedNewsUseCase
+            getSavedNewsUseCase,
+            deleteSavedNewsUseCase
         ) as T
     }
 
